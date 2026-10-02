@@ -11,12 +11,15 @@ const PORT = process.env.PORT || 5000;
 const CACHE_KEY = 'manchester-united-next-match';
 const CACHE_TTL_MS = 60 * 60 * 1000;
 const API_URL = 'https://api.football-data.org/v4/teams/66/matches?status=SCHEDULED&limit=1';
-const allowedOrigin = process.env.FRONTEND_ORIGIN || 'http://localhost:5173';
+const allowedOrigins = [
+    process.env.FRONTEND_ORIGIN || 'http://localhost:5173',
+    'https://united-match-checker.vercel.app',
+];
 let pendingFixtureRequest;
 
 app.disable('x-powered-by');
 app.use(helmet());
-app.use(cors({ origin: allowedOrigin, methods: ['GET'] }));
+app.use(cors({ origin: allowedOrigins, methods: ['GET'] }));
 app.use(express.json({ limit: '10kb' }));
 
 app.get('/api/match/next', async (req, res) => {
